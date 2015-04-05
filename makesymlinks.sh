@@ -8,7 +8,7 @@
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files="bashrc nanorc profile screenrc vimrc"    # list of files/folders to symlink in homedir
+files="bashrc nanorc profile screenrc vimrc pythonrc"    # list of files/folders to symlink in homedir
 
 ##########
 

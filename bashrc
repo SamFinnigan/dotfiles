@@ -27,7 +27,7 @@ shopt -s checkwinsize
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-	PS1='\[\e[0;31;109m\]\h\[\e[m\]:\w\[\e[m\]\[\e[1;32m\]\$\[\e[m\] \[\e[0m\]'
+	PS1='\[\e[0;35;109m\]\h\[\e[m\]:\w\[\e[m\]\[\e[1;32m\]\$\[\e[m\] \[\e[0m\]'
 # Old
 #	PS1='\[\e[0;33;109m\]\h\[\e[m\]:\[\e[1;34m\]\w\[\e[m\]\[\e[1;32m\]\$\[\e[m\] \[\e[0m\]'
 ;;
@@ -38,7 +38,7 @@ esac
 case $TERM in
 screen)
     PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\033\\"'
-    PS1='\[\e[0;31;109m\]\h\[\e[m\]:\w\[\e[m\]\[\e[1;32m\]\$\[\e[m\] \[\e[0m\]'
+    PS1='\[\e[0;35;109m\]\h\[\e[m\]:\w\[\e[m\]\[\e[1;32m\]\$\[\e[m\] \[\e[0m\]'
 ;;
 esac
 
@@ -83,3 +83,6 @@ fi
 #[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd
 
 export JAVA_HOME=/usr/java/jdk1.6.0_37/
+export EDITOR=vi
+export VISUAL=vi
+export PYTHONSTARTUP=~/.pythonrc
