@@ -9,6 +9,7 @@ set autoindent
 set tabstop=4
 set shiftwidth=4
 set smartindent
+set expandtab		 " expand tabs to spaces
 
 " Set a key to toggle paste insert mode
 set pastetoggle=<F10>
@@ -21,3 +22,7 @@ set textwidth=0 wrapmargin=0
 
 " line numbers
 set number
+
+" disable the annoying F1 help key
+nmap <F1> :echo<CR>
+imap <F1> <C-o>:echo<CR>
