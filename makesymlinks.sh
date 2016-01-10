@@ -19,13 +19,21 @@ echo "...done"
 
 # change to the dotfiles directory
 echo "Changing to the $dir directory"
-cd $dir
+cd $dir || exit 1
 echo "...done"
 
 # move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks 
-for file in $files; do
-    echo "Moving any existing dotfiles from ~ to $olddir"
-    mv ~/.$file ~/dotfiles_old/
-    echo "Creating symlink to $file in home directory."
-    ln -sfn $dir/$file ~/.$file
+echo "Moving existing dotfiles from ~ to $olddir"
+
+for file in $files; 
+do
+    if [[ -L ~/.$file ]]; 
+    then 
+        echo "Skipping ~/.$file as it is a symlink."
+    else 
+        mv -bv ~/.$file ~/dotfiles_old/$file 2>/dev/null
+
+        echo "Creating symlink to $file in home directory."
+        ln -vsfn $dir/$file ~/.$file
+    fi
 done
