@@ -6,8 +6,8 @@
 
 ########## Variables
 
-dir=~/dotfiles                    # dotfiles directory
-olddir=~/dotfiles_old             # old dotfiles backup directory
+dir=~/.dotfiles                    # dotfiles directory
+olddir=~/.dotfiles_old             # old dotfiles backup directory
 files="bashrc bash_aliases nanorc profile screenrc vimrc pythonrc"    # list of files/folders to symlink in homedir
 
 ##########
