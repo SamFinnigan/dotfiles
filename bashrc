@@ -28,6 +28,13 @@ shopt -s checkwinsize
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWCOLORHINTS=1
 
+if [ -f ~/.bash_git ]; then
+    source ~/.bash_git
+fi
+
+if [ "$(type -t __git_ps1)" = "function" ]; then
+    GIT_STATUS='\[\e[30;1m\]$(__git_ps1 "[%s] ")\[\e[0m\]'
+fi
 
 # 'Random' coloured PS1 hostname, courtesy of Seb
 str256() { echo $((0x$(echo $1|md5sum|cut -c-4)%256)); }
@@ -48,7 +55,7 @@ USERNAME_COLOUR=$(cat "$USERNAME_COLOUR_FILENAME")
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1=$'\[\e[30;1m\]$(__git_ps1 "[%s] ")\[\e[0m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\[$(tput bold)\]\[\033[38;5;${USERNAME_COLOUR}m\]\u\[\033[00m\]@\[$(tput bold)\]\[\033[38;5;${HOSTNAME_COLOUR}m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1=${GIT_STATUS}'\[\e[0m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\[$(tput bold)\]\[\033[38;5;${USERNAME_COLOUR}m\]\u\[\033[00m\]@\[$(tput bold)\]\[\033[38;5;${HOSTNAME_COLOUR}m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     # Old
 	#PS1='\[\e[0;35;109m\]\h\[\e[m\]:\w\[\e[m\]\[\e[1;32m\]\$\[\e[m\] \[\e[0m\]'
     export PS1

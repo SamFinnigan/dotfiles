@@ -37,3 +37,9 @@ do
         ln -vsfn $dir/$file ~/.$file
     fi
 done
+
+# Get __git_ps1 if it isn't in the shell already
+if [ "$(type -t __git_ps1)" = "function" ]; then
+    curl -L https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh > ~/.bash_git
+fi
+
