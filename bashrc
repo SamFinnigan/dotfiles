@@ -36,17 +36,17 @@ if [ "$(type -t __git_ps1)" = "function" ]; then
     GIT_STATUS='\[\e[30;1m\]$(__git_ps1 "[%s] ")\[\e[0m\]'
 fi
 
-# 'Random' coloured PS1 hostname, courtesy of Seb
+# Generate a colour for PS1 hostname, courtesy of Seb
 str256() { echo $((0x$(echo $1|md5sum|cut -c-4)%256)); }
 str2color() { echo -e "\033[38;5;$(str256 "$1")m$1\033[00m"; }
 
 HOSTNAME_COLOUR_FILENAME="$HOME/.$(hostname)-colour"
 test -f "$HOSTNAME_COLOUR_FILENAME" ||
-    echo $((0x$(hostname|md5sum|cut -c-4)%256)) > "$HOSTNAME_COLOUR_FILENAME"
+    echo $(str256 hostname) > "$HOSTNAME_COLOUR_FILENAME"
 
 USERNAME_COLOUR_FILENAME="$HOME/.$(whoami)-colour"
 test -f "$USERNAME_COLOUR_FILENAME" ||
-    echo $((0x$(whoami|md5sum|cut -c-4)%256)) > "$USERNAME_COLOUR_FILENAME"
+    echo $(str256 whoami) > "$USERNAME_COLOUR_FILENAME"
 
 HOSTNAME_COLOUR=$(cat "$HOSTNAME_COLOUR_FILENAME")
 USERNAME_COLOUR=$(cat "$USERNAME_COLOUR_FILENAME")
