@@ -49,8 +49,13 @@ USERNAME_COLOUR_FILENAME="$HOME/.$(whoami)-colour"
 test -f "$USERNAME_COLOUR_FILENAME" ||
     echo $(str256 whoami) > "$USERNAME_COLOUR_FILENAME"
 
+DIRECTORY_COLOUR_FILENAME="$HOME/.dir-colour"
+test -f "$DIRECTORY_COLOUR_FILENAME" ||
+    echo "34" > "$DIRECTORY_COLOUR_FILENAME"
+
 HOSTNAME_COLOUR=$(cat "$HOSTNAME_COLOUR_FILENAME")
 USERNAME_COLOUR=$(cat "$USERNAME_COLOUR_FILENAME")
+DIRECTORY_COLOUR=$(cat "$DIRECTORY_COLOUR_FILENAME")
 
 # Touch this file to make the statusline bold
 BOLD_STATUSLINE_FILENAME="$HOME/.boldstatus"
@@ -62,9 +67,10 @@ HIDE_HOSTNAME_FILENAME="$HOME/.hidehost"
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    CHROOT_STATUS='\[\e[0m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]'
-
+    CHROOT_STATUS='\[\e[0m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}' 
+    
     # Configure the PS1 based on the existence of these files:
+    # bold: '\[\033[01;32m\]'
     test -f $BOLD_STATUSLINE_FILENAME &&
         BOLD='\[$(tput bold)\]' || 
         unset BOLD
@@ -75,8 +81,8 @@ xterm*|rxvt*)
     test -f $HIDE_HOSTNAME_FILENAME &&
         unset HOSTLINE
 
-    DIRECTORY='\[\033[01;34m\]\w'
-    PROMPT='\[\033[00m\]\$ '
+    DIRECTORY='\[\033[38;5;${DIRECTORY_COLOUR}m\]\w\[\033[00m\]'
+    PROMPT='\$ '
 
     PS1=${GIT_STATUS}${CHROOT_STATUS}${USERLINE}${HOSTLINE}${DIRECTORY}${PROMPT}
     export PS1
