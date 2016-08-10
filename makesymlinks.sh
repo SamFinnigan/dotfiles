@@ -31,7 +31,7 @@ do
     then 
         echo "Skipping ~/.$file as it is a symlink."
     else 
-        mv -bv ~/.$file ~/dotfiles_old/$file 2>/dev/null
+        mv -bv ~/.$file ~/$olddir/$file 2>/dev/null
 
         echo "Creating symlink to $file in home directory."
         ln -vsfn $dir/$file ~/.$file
