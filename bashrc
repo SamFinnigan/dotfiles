@@ -40,6 +40,7 @@ fi
 str256() { echo $((0x$(echo $1|md5sum|cut -c-4)%256)); }
 str2color() { echo -e "\033[38;5;$(str256 "$1")m$1\033[00m"; }
 
+# Cache colors in files
 HOSTNAME_COLOUR_FILENAME="$HOME/.$(hostname)-colour"
 test -f "$HOSTNAME_COLOUR_FILENAME" ||
     echo $(str256 hostname) > "$HOSTNAME_COLOUR_FILENAME"
@@ -51,13 +52,33 @@ test -f "$USERNAME_COLOUR_FILENAME" ||
 HOSTNAME_COLOUR=$(cat "$HOSTNAME_COLOUR_FILENAME")
 USERNAME_COLOUR=$(cat "$USERNAME_COLOUR_FILENAME")
 
+# Touch this file to make the statusline bold
+BOLD_STATUSLINE_FILENAME="$HOME/.boldstatus"
+# Touch this file to hide the username in the statusline
+HIDE_USERNAME_FILENAME="$HOME/.hideuser"
+# Touch this file to hide the hostname in the statusline
+HIDE_HOSTNAME_FILENAME="$HOME/.hidehost"
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1=${GIT_STATUS}'\[\e[0m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\[$(tput bold)\]\[\033[38;5;${USERNAME_COLOUR}m\]\u\[\033[00m\]@\[$(tput bold)\]\[\033[38;5;${HOSTNAME_COLOUR}m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    # Old
-	#PS1='\[\e[0;35;109m\]\h\[\e[m\]:\w\[\e[m\]\[\e[1;32m\]\$\[\e[m\] \[\e[0m\]'
+    CHROOT_STATUS='\[\e[0m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]'
+
+    # Configure the PS1 based on the existence of these files:
+    test -f $BOLD_STATUSLINE_FILENAME &&
+        BOLD='\[$(tput bold)\]' || 
+        unset BOLD
+    USERLINE=${BOLD}'\[\033[38;5;${USERNAME_COLOUR}m\]\u\[\033[00m\]@' 
+    test -f $HIDE_USERNAME_FILENAME && 
+        unset USERLINE
+    HOSTLINE=${BOLD}'\[\033[00m\]\[\033[38;5;${HOSTNAME_COLOUR}m\]\h\[\033[00m\]:'
+    test -f $HIDE_HOSTNAME_FILENAME &&
+        unset HOSTLINE
+
+    DIRECTORY='\[\033[01;34m\]\w'
+    PROMPT='\[\033[00m\]\$ '
+
+    PS1=${GIT_STATUS}${CHROOT_STATUS}${USERLINE}${HOSTLINE}${DIRECTORY}${PROMPT}
     export PS1
 ;;
 screen)
