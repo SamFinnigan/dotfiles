@@ -24,3 +24,4 @@ fi
 export LANGUAGE="en"
 export LANG="C"
 export LC_MESSAGES="C"
+export TERM="xterm-256color"
